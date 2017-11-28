@@ -1,43 +1,60 @@
 import { Component, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup, FormControl, Validators,ValidationErrors } from '@angular/forms';
+import { FormBuilder, FormGroup, FormControl, Validators, ValidationErrors, AbstractControl } from '@angular/forms';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { DataService } from '../data.service';
+import { data } from '../data.mock';
+import User from '../data.model';
+import * as CustomeValidators from './custome.validator';
 
-import { User } from '../data.model';
-//import {data} from '../data.mock';
 @Component({
   selector: 'app-user',
   templateUrl: './user.component.html',
   styleUrls: ['./user.component.css']
 })
 export class UserComponent implements OnInit {
-userForm;
-name = new FormControl();
-//private userdata: any = {};
+userForm: FormGroup;
+message = false;
+uniquename = false;
+nameFormControlValue;
+allNames: string[] = [];
 public userdata: User;
- constructor(private dservice: DataService, private fb: FormBuilder){}
+isNameUnique = false;
+newDataOfUsers;
+get name() { return this.userForm.get('name'); }
+constructor(private dservice: DataService) {}
  ngOnInit() {
       this.userForm = new FormGroup({
-      name: new FormControl('', [Validators.required, Validators.pattern('^[A-Z]([A-Z]?[a-z0-9_$&-]{2,20})+')]
+      name: new FormControl('',
+                    [
+                      Validators.required,
+                      Validators.pattern(/^[A-Z]{1}.*/),
+                      CustomeValidators.mustNeedTwoAlphapets,
+                      CustomeValidators.SpcialCharacterValidation,
+                      CustomeValidators.nameAlreadyPresent
+                    ]),
     });
-    
   }
-    save(userdata: User) {
-        //console.log(userdata);
-          this.dservice.setUser(userdata);
-          if(this.userForm.valid){
+
+    save(name) {
+          const newName = this.name.value;
+          console.log('name', newName);
+          console.log(name);
+          this.allNames = JSON.parse(localStorage.getItem('mydata'));
+          this.allNames.push(newName);
+          localStorage.setItem('mydata', (JSON.stringify(this.allNames)));
+          console.log(this.allNames);
+          if (this.userForm.valid) {
             console.log('FormSubmitted!');
             this.userForm.reset();
+            this.messageDisplay();
           }
-          console.log(userdata);
     }
-    // save(user) {
-    // this.dservice.addUser(user);
-    //     if (this.userForm.valid) {
-    //   console.log('Form Submitted!');
-    //   this.userForm.reset();
-    //     }
-    //     console.log(data);
-    // }
- 
+    messageDisplay() {
+        this.message = true;
+         setTimeout(() => {
+          console.log(this.message);
+          this.message = false;
+        }, 5000);
+
+      }
 }

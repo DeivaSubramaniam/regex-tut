@@ -1,5 +1,5 @@
 import { NgModule } from '@angular/core';
-import { BrowserModule }       from '@angular/platform-browser';
+import { BrowserModule } from '@angular/platform-browser';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';  // <-- #1 import module
 
 import { AppComponent } from './app.component';
@@ -9,7 +9,7 @@ import { DataService } from './data.service';
 @NgModule({
   declarations: [
     AppComponent,
-    UserComponent, 
+    UserComponent,
   ],
   imports: [
     FormsModule,
@@ -17,6 +17,6 @@ import { DataService } from './data.service';
     ReactiveFormsModule
   ],
   providers: [ DataService ],
-  bootstrap: [AppComponent]
+  bootstrap: [ AppComponent ]
 })
 export class AppModule { }

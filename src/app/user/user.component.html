@@ -4,13 +4,38 @@
       <h2>User data</h2>
         <form [formGroup]="userForm" (ngSubmit)="save(userForm.value)" novalidate>
           <div class="form-group">
-            <label>Name: </label>
-            <input type="text" class="form-control" placeholder="Name*" formControlName="name">
-             <div class="alert" *ngIf="!userForm.controls['name'].valid && userForm.controls['name'].touched">This Field is required</div><br>
+            <label class="center-block">Name:
+              <input type="text" class="form-control" placeholder="Name*" id="name" formControlName="name"><br>
+            </label>
+            <!--<div class="alert" *ngIf="!userForm.controls['name'].valid && userForm.controls['name'].touched">
+               Name is Mandatory
+            </div>-->
+            <p *ngIf="name.touched && name.errors && name.errors.required">Name is Mandatory </p>
+            <p *ngIf="name.errors && name.errors.pattern">Name should start with upper case</p>
+            <p *ngIf="name.errors && name.errors.specialCharactors">Name should contain special chars of (&$_-)</p>
+            <p *ngIf="name.errors && name.errors && name.errors.nameAlreadyPresent">Name already exist</p>
+            <p *ngIf="name.dirty && name.errors && name.errors.atleastTwoAlphabets">Name Should contain two Alphabets</p>
+              <!--<p *ngIf="!userForm.controls['name'].valid && userForm.controls['name'].touched">Name is mandatory</p>
+              <p *ngIf="isNameUnique">Name Already Exist</p>-->
+              <!--<p *ngIf="name.errors && name.errors.containsSpecialChars">
+                Name contains forbidden special chars</p>
+              <p *ngIf="name.errors && name.errors.isUniqueValidator">Name already exist</p>
+              <p *ngIf="name.dirty && name.errors && !name.errors.minLength && !name.errors.containsSpecialChars
+                  && !name.errors.pattern && !name.errors.required">
+                    Name can't be less than 2 charactor
+              </p>-->
 
-              <button type="submit" class="button expanded" value="Submit Form" [disabled]='!userForm.valid'> Save </button>
+            <!--<div>
+              <div *ngIf="nameField.errors?.pattern">
+              <p class="has-error">
+                Only spaces, letters, and numbers are allowed.
+              </p>
+            </div>-->
+                <!--<p *ngIf="name.errors && name.errors.isUniqueValidator">Name already exist</p>-->
+            <button type="submit" class="btn btn-success" value="Submit Form" [disabled]='!userForm.valid'> Save </button>
           </div>
       </form>
+      <p *ngIf="message"> Saved Successfully!!!</p>
       <p>Form value: {{ userForm.value | json }}</p>
       <p>Form status: {{ userForm.status | json }}</p>
     </div>

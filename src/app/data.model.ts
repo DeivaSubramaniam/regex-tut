@@ -1,4 +1,3 @@
-export class User {
-  constructor( id:number = null,
-  name:string = ''){}
+export default class User {
+   name: string;
 }
